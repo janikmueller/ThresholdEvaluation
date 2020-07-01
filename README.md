@@ -16,16 +16,20 @@ Running the native image only with --help/--version returns the help message/ver
 
 ## Examples
 ```
-./thresholdevaluation http://localhost:8080/ MyProject master 'Project Default' --login admin admin --fail-on-yellow
+./ThresholdEvaluationNativeImage http://localhost:8080/ MyProject master 'Project Default' --login admin admin --fail-on-yellow
 ```
 ```
-./thresholdevaluation --help
+./ThresholdEvaluationNativeImage --help
 ```
 
 ## Project Usage
 
-In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow the following steps.
-
 **Prerequisites**
 - install graalvm (https://www.graalvm.org/getting-started/)
-- 
+- install maven
+
+In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:
+- make your changes to ```~/ThresholdEvaluation/thresholdevaluation/src/main/java/com.cqse.thresholdevaluation/ThresholdEvaluation.java```
+- open the terminal/command prompt and navigate to ```~/ThresholdEvaluation/thresholdevaluation/```
+- run ```mvn package```
+- if build was successful, the new native image is located at ```~/ThresholdEvaluation/thresholdevaluation/target```

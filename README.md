@@ -26,7 +26,7 @@ Running the native image only with --help/--version returns the help message/ver
 
 **Prerequisites**
 - install graalvm (https://www.graalvm.org/getting-started/)
-- install maven
+- install maven (https://maven.apache.org/install.html)
 
 In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:
 - make your changes to ```~/ThresholdEvaluation/thresholdevaluation/src/main/java/com.cqse.thresholdevaluation/ThresholdEvaluation.java```

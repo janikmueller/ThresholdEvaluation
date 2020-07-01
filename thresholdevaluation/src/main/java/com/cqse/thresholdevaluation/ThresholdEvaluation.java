@@ -28,7 +28,7 @@ public class ThresholdEvaluation {
                 }
                 if (args[0].equals("--version")) {
                     System.out.println("Version: 1.0");
-                    System.exit(9);
+                    System.exit(0);
                 }
             }
             throw new IllegalArgumentException(ThresholdEvaluation.INPUT_ARGUMENT_PATTERN);

@@ -1,7 +1,7 @@
 # ThresholdEvaluation
 This project builds a native image. This native image returns which thresholds are violated.
 
-## Parameters
+## Native Image Usage
 **The following parameters are required:**
 - base-url: the url to access the teamscale instance
 - project: the project name which is already created in teamscale and gets evaluated
@@ -21,3 +21,11 @@ Running the native image only with --help/--version returns the help message/ver
 ```
 ./thresholdevaluation --help
 ```
+
+## Project Usage
+
+In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow the following steps.
+
+**Prerequisites**
+- install graalvm (https://www.graalvm.org/getting-started/)
+- 

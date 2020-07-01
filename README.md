@@ -1,6 +1,7 @@
 # ThresholdEvaluation
 This project builds a native image. This native image returns which thresholds are violated.
 
+
 The following parameters are required:
 - base-url: the url to access the teamscale instance
 - project: the project name which is already created in teamscale and gets evaluated
@@ -13,7 +14,9 @@ Optional parameters:
   
 Running the native image only with --help/--version returns the help message/version of the native image.
 
+
 Example:
 
 ./thresholdevaluation http://localhost:8080/ MyProject master 'Project Default' --login admin admin --fail-on-yellow
+
 ./thresholdevaluation --help

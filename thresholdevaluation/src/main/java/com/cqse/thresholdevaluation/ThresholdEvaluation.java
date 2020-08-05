@@ -14,16 +14,17 @@ public class ThresholdEvaluation {
     private final OkHttpClient httpClient = new OkHttpClient();
 
     public static final String INPUT_ARGUMENT_PATTERN = "Please use the following input pattern:\n"
-            + "thresholdevaluation <base-url> <project> <branch> <threshold-configuration>\n"
-            + "Can be followed by optionals:\n--login <username> <password>\n--fail-on-yellow";
+            + "thresholdevaluation <base-url> <project> <threshold-configuration>\n"
+            + "Can be followed by optionals:\n--branch <branchname>\n--login <username> <password>\n--fail-on-yellow";
 
     public static void main(String[] args) throws IllegalArgumentException, IOException {
 
-        if (args.length < 4) {
+        if (args.length < 3) {
             if (args.length > 0) {
                 if (args[0].equals("--help")) {
                     System.out.println(ThresholdEvaluation.INPUT_ARGUMENT_PATTERN);
                     System.out.println("The base-url must begin with 'http://' or 'https://' and end with '/'");
+                    System.out.println("The project id usually has small-case letter only.");
                     System.exit(0);
                 }
                 if (args[0].equals("--version")) {
@@ -35,11 +36,18 @@ public class ThresholdEvaluation {
         }
 
         ThresholdEvaluation obj = new ThresholdEvaluation();
-        String baseUrl = args[0], project = args[1], branch = args[2], thresholdConfig = args[3], username = "",
+        String baseUrl = args[0], project = args[1], thresholdConfig = args[2], branch = "", username = "",
                 password = "";
         boolean failOnYellow = false, login = false;
 
-        for (int i = 4; i < args.length; i++) {
+        for (int i = 3; i < args.length; i++) {
+            if(args[i].equals("--branch")){
+                if(args.length < i+2){
+                    throw new IllegalArgumentException(ThresholdEvaluation.INPUT_ARGUMENT_PATTERN);
+                }
+                branch = args[++i];
+                continue;
+            }
             if (args[i].equals("--login")) {
                 if (args.length < i + 3) {
                     throw new IllegalArgumentException(ThresholdEvaluation.INPUT_ARGUMENT_PATTERN);
@@ -66,6 +74,7 @@ public class ThresholdEvaluation {
         if (obj.evaluateResponse(failOnYellow, response)) {
             System.exit(2);
         } else {
+            System.out.println("All metrics passed the evaluation.");
             System.exit(0);
         }
 
@@ -106,8 +115,11 @@ public class ThresholdEvaluation {
 
         String url = baseUrl + "api/projects/" + URLEncoder.encode(project, StandardCharsets.UTF_8.toString())
                 + "/metric-assessments/?uniform-path=&configuration-name="
-                + URLEncoder.encode(thresholdConfig, StandardCharsets.UTF_8.toString()) + "&t="
-                + URLEncoder.encode(branch, StandardCharsets.UTF_8.toString()) + "%3AHEAD";
+                + URLEncoder.encode(thresholdConfig, StandardCharsets.UTF_8.toString());
+
+        if(!branch.equals("")) {
+            url += "&t=" + URLEncoder.encode(branch, StandardCharsets.UTF_8.toString()) + "%3AHEAD";
+        }
 
         Request request = new Request.Builder().url(url).addHeader("Cookie", cookie).build();
 

@@ -26,7 +26,13 @@ Running the native image only with --help/--version returns the help message/ver
 
 **Prerequisites**
 - install graalvm (https://www.graalvm.org/getting-started/)
+- install native-image extension of graalvm
 - install maven (https://maven.apache.org/install.html)
+
+Set JAVA_HOME to your graalVM JVM. Example:
+```
+$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java8-20.1.0/Contents/Home
+```
 
 In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:
 - make your changes to ```~/ThresholdEvaluation/thresholdevaluation/src/main/java/com.cqse.thresholdevaluation/ThresholdEvaluation.java```

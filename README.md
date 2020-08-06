@@ -29,7 +29,7 @@ Running the native image only with --help/--version returns the help message/ver
 - install native-image extension of graalvm
 - install maven (https://maven.apache.org/install.html)
 
-Configure your toolchain.xml:
+**Configure your toolchain.xml**
 - if you don't have a toolchain.xml yet, create the file at ~/.m2
 - add the following code to your toolchain.xml, exchanging < path-to-java-graalvm-jdk > with the actual path:
 ```
@@ -47,7 +47,7 @@ Configure your toolchain.xml:
   </toolchain>
 </toolchains>
 ```
-
+**Build native-image**
 In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:
 - make your changes to ```~/ThresholdEvaluation/thresholdevaluation/src/main/java/com.cqse.thresholdevaluation/ThresholdEvaluation.java```
 - open the terminal/command prompt and navigate to ```~/ThresholdEvaluation/thresholdevaluation/```

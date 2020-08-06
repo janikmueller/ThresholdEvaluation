@@ -29,9 +29,23 @@ Running the native image only with --help/--version returns the help message/ver
 - install native-image extension of graalvm
 - install maven (https://maven.apache.org/install.html)
 
-Set JAVA_HOME to your graalVM JVM. Example:
+Configure your toolchain.xml:
+- if you don't have a toolchain.xml yet, create this file at ~/.m2
+- add the following code to it, exchanging <path-to-java-graalvm-jdk> with the actual path:
 ```
-$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java8-20.1.0/Contents/Home
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+        <version>1.8</version>
+        <graalVmVersion>20.1.0</graalVmVersion>
+    </provides>
+    <configuration>
+        <jdkHome><path-to-java-graalvm-jdk></jdkHome>
+    </configuration>
+  </toolchain>
+</toolchains>
 ```
 
 In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:

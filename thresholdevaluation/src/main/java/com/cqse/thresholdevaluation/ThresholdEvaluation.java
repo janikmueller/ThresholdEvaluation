@@ -29,6 +29,7 @@ public class ThresholdEvaluation {
                     System.out.println(ThresholdEvaluation.INPUT_ARGUMENT_PATTERN);
                     System.out.println("The base-url must begin with 'http://' or 'https://' and end with '/'");
                     System.out.println("The project id usually has small-case letter only.");
+                    System.out.println("Exit codes: 0 - success, 1 - error, 2 - data unavailable, 3 - metric thresholds violated");
                     System.exit(0);
                 }
                 if (args[0].equals("--version")) {
@@ -79,13 +80,7 @@ public class ThresholdEvaluation {
 
         String response = obj.sendGet(cookie, baseUrl, project, branch, thresholdConfig);
 
-        if (obj.evaluateResponse(failOnYellow, response)) {
-            System.exit(2);
-        } else {
-            System.out.println("All metrics passed the evaluation.");
-            System.exit(0);
-        }
-
+        System.exit(obj.evaluateResponse(failOnYellow,response));
     }
 
     public ThresholdEvaluation(){
@@ -139,16 +134,20 @@ public class ThresholdEvaluation {
 
     }
 
-    private boolean evaluateResponse(boolean failOnYellow, String unparsedResponse) throws IOException {
-        boolean failed = false;
+    private int evaluateResponse(boolean failOnYellow, String unparsedResponse) throws IOException {
+        int exitCode = 0;
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode response = objectMapper.readTree(unparsedResponse);
 
+        if(response.size() == 0){
+            System.out.println("WARNING: The data is unavailable. No metrics and thresholds were evaluated.");
+            exitCode = 2;
+        }
         for(JsonNode group : response){
             String groupRating = group.get("rating").asText();
             if(groupRating.equals("RED") || (failOnYellow && groupRating.equals("YELLOW"))){
-                failed = true;
+                exitCode = 3;
                 System.out.println("Violation in group " + group.get("name") + ":");
                 JsonNode metrics = group.get("metrics");
                 for(JsonNode metric : metrics){
@@ -165,7 +164,10 @@ public class ThresholdEvaluation {
                 }
             }
         }
-        return failed;
+        if(exitCode == 0){
+            System.out.println("All metrics passed the evaluation.");
+        }
+        return exitCode;
     }
 
     private String sendGet(String cookie, String baseUrl, String project, String branch, String thresholdConfig) throws UnsupportedEncodingException {

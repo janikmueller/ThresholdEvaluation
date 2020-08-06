@@ -4,14 +4,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 
 public class ThresholdEvaluation {
 
-    private final OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient;
 
     public static final String INPUT_ARGUMENT_PATTERN = "Please use the following input pattern:\n"
             + "thresholdevaluation <base-url> <project> <threshold-configuration>\n"
@@ -76,6 +80,57 @@ public class ThresholdEvaluation {
         } else {
             System.out.println("All metrics passed the evaluation.");
             System.exit(0);
+        }
+
+    }
+
+    public ThresholdEvaluation(){
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        setUpSslValidation(builder);
+        httpClient = builder.build();
+    }
+
+    private static void setUpSslValidation(OkHttpClient.Builder builder) {
+        SSLSocketFactory sslSocketFactory;
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[]{TrustAllCertificatesManager.INSTANCE}, new SecureRandom());
+            sslSocketFactory = sslContext.getSocketFactory();
+        } catch (GeneralSecurityException e) {
+            System.err.println("Could not disable SSL certificate validation. Leaving it enabled (" + e + ")");
+            return;
+        }
+
+        // this causes OkHttp to accept all certificates
+        builder.sslSocketFactory(sslSocketFactory, TrustAllCertificatesManager.INSTANCE);
+        // this causes it to ignore invalid host names in the certificates
+        builder.hostnameVerifier((String hostName, SSLSession session) -> true);
+    }
+
+    /**
+     * A simple implementation of {@link X509TrustManager} that simple trusts every certificate.
+     */
+    public static class TrustAllCertificatesManager implements X509TrustManager {
+
+        /** Singleton instance. */
+        /*package*/ static final TrustAllCertificatesManager INSTANCE = new TrustAllCertificatesManager();
+
+        /** Returns <code>null</code>. */
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+        /** Does nothing. */
+        @Override
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            // Nothing to do
+        }
+
+        /** Does nothing. */
+        @Override
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            // Nothing to do
         }
 
     }

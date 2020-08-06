@@ -30,8 +30,8 @@ Running the native image only with --help/--version returns the help message/ver
 - install maven (https://maven.apache.org/install.html)
 
 Configure your toolchain.xml:
-- if you don't have a toolchain.xml yet, create this file at ~/.m2
-- add the following code to it, exchanging <path-to-java-graalvm-jdk> with the actual path:
+- if you don't have a toolchain.xml yet, create the file at ~/.m2
+- add the following code to your toolchain.xml, exchanging < path-to-java-graalvm-jdk > with the actual path:
 ```
 <?xml version="1.0" encoding="UTF8"?>
 <toolchains>

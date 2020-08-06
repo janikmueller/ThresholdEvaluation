@@ -48,7 +48,6 @@ Running the native image only with --help/--version returns the help message/ver
 </toolchains>
 ```
 **Build native-image**
-In order to modify the ThresholdEvaluation.java file and then build a new native image from it, follow these steps:
 - make your changes to ```~/ThresholdEvaluation/thresholdevaluation/src/main/java/com.cqse.thresholdevaluation/ThresholdEvaluation.java```
 - open the terminal/command prompt and navigate to ```~/ThresholdEvaluation/thresholdevaluation/```
 - run ```mvn package```

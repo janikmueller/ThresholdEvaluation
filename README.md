@@ -9,8 +9,8 @@ This project builds a native image. This native image returns which thresholds a
 - threshold-configuration: the threshold configuration profile defining which metrics are evaluated with the corresponding threshold value
 
 **Optional parameters:**
-- --branch <branchname>: if the project is a repository you can specify which branch to evaluate
-- --login <username> <password>: if a login is required to access the teamscale instance, set the --login flag followed by the username and password
+- --branch < branch-name >: if the project is a repository you can specify which branch to evaluate
+- --login < username > < password >: if a login is required to access the teamscale instance, set the --login flag followed by the username and password
 - --fail-on-yellow: set this flag, if a violation of the 'YELLOW' threshold value should be printed and cause a non-zero exit code as well (without the flag only violations of the 'RED' threshold value are printed and cause a non-zero exit code)
   
 **Exit codes**

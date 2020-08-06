@@ -44,6 +44,10 @@ public class ThresholdEvaluation {
                 password = "";
         boolean failOnYellow = false, login = false;
 
+        if(!baseUrl.endsWith("/")){
+            baseUrl += "/";
+        }
+
         for (int i = 3; i < args.length; i++) {
             if(args[i].equals("--branch")){
                 if(args.length < i+2){
